@@ -1,7 +1,7 @@
-﻿using HelloWorldService.Application;
-using HelloWorldService.Infrastructure;
+﻿using System;
 using EasyDesk.CleanArchitecture.Web.DependencyInjection;
-using System;
+using HelloWorldService.Application;
+using HelloWorldService.Infrastructure;
 
 namespace HelloWorldService.Web.DependencyInjection
 {

@@ -37,7 +37,7 @@ jobs:
           unit-tests-project: ${{ env.UNIT_TESTS_PROJECT }}
           output-dir: ${{ env.OUTPUT_DIR }}/app
           sql-file-name: ${{ env.OUTPUT_DIR }}/update-database.sql
-          warnings-as-errors: false
+          warnings-as-errors: true
       - uses: actions/upload-artifact@v2
         with:
           name: build-artifacts
@@ -87,6 +87,7 @@ jobs:
     runs-on: windows-2019
     needs: [build, release]
     concurrency: deploy-ua
+    environment: user-acceptance
     if: needs.build.outputs.should-deploy == 'true'
     steps:
       - uses: actions/download-artifact@v2
@@ -107,6 +108,7 @@ jobs:
     runs-on: windows-2019
     needs: [build, deploy-to-ua]
     concurrency: deploy-production
+    environment: production
     if: needs.build.outputs.should-deploy == 'true'
     steps:
       - uses: actions/download-artifact@v2

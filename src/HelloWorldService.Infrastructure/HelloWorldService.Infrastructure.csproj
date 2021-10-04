@@ -5,12 +5,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyDesk.CleanArchitecture.Infrastructure" Version="0.12.1" />
+    <PackageReference Include="EasyDesk.CleanArchitecture.Application" Version="0.15.1" />
+    <PackageReference Include="EasyDesk.CleanArchitecture.Domain" Version="0.15.1" />
+    <PackageReference Include="EasyDesk.CleanArchitecture.Infrastructure" Version="0.15.1" />
+    <PackageReference Include="EasyDesk.CleanArchitecture.Testing" Version="0.15.1" />
+    <PackageReference Include="EasyDesk.CleanArchitecture.Web" Version="0.15.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HelloWorldService.Application\HelloWorldService.Application.csproj" />
     <ProjectReference Include="..\HelloWorldService.Domain\HelloWorldService.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DataAccess\Queries\" />
   </ItemGroup>
 
   <PropertyGroup>
