@@ -15,7 +15,7 @@ namespace HelloWorldService.Domain.Aggregates.HelloWorldAggregate
 
         protected override void Validate(string value)
         {
-            if (value is null || value.Length == 0)
+            if (string.IsNullOrEmpty(value))
             {
                 throw new ArgumentException("Subject name can't be an empty string", nameof(value));
             }
