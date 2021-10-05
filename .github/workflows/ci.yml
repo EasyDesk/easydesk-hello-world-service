@@ -1,5 +1,8 @@
 name: Continuous Integration
 
+env:
+  AZURE_APP_SERVICE_NAME: 'easydesk-hello'
+
 on:
   workflow_dispatch:
   push:
@@ -46,8 +49,6 @@ jobs:
     concurrency: deploy-test
     environment: test
     if: needs.build.outputs.should-deploy == 'true'
-    env:
-      AZURE_APP_SERVICE_NAME: 'easydesk-hello'
     steps:
       - uses: actions/download-artifact@v2
         with:
