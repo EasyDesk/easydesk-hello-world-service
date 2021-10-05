@@ -1,7 +1,7 @@
 name: Continuous Integration
 
 env:
-  AZURE_APP_SERVICE_NAME: ''
+  AZURE_APP_SERVICE_NAME: 'easydesk-hello'
 
 on:
   workflow_dispatch:
