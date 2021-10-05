@@ -73,7 +73,7 @@ jobs:
         with:
           package: app
           app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          slot-name: test
+          slot-name: production # only one available
   release:
     name: GitHub Release
     runs-on: ubuntu-20.04
@@ -94,45 +94,3 @@ jobs:
           files: |
             update-database.sql
             assets.zip
-  deploy-to-ua:
-    name: Deploy to User Acceptance environment
-    runs-on: windows-2019
-    needs: [build, release]
-    concurrency: deploy-ua
-    environment: user-acceptance
-    if: needs.build.outputs.should-deploy == 'true'
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: build-artifacts
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          package: app
-          app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          slot-name: user-acceptance
-  deploy-to-production:
-    name: Deploy to Producion environment
-    runs-on: windows-2019
-    needs: [build, deploy-to-ua]
-    concurrency: deploy-prod
-    environment: production
-    if: needs.build.outputs.should-deploy == 'true'
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: build-artifacts
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          package: app
-          app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          slot-name: production
