@@ -62,7 +62,7 @@ jobs:
         with:
           package: app
           app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          slot-name: production # only one available with free plan
+          slot-name: production # the only one available with free plan
   release:
     name: GitHub Release
     runs-on: ubuntu-20.04
