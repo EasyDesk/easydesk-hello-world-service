@@ -53,17 +53,6 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build-artifacts
-      # This example doesn't use a database so we don't need this
-      # - name: Deploy to Azure
-      #   uses: EasyDesk/job-azure-publish-webapp@v1
-      #   with:
-      #     azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
-      #     app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-      #     publish-dir: app
-      #     slot-name: test
-      #     migrations-script: update-database.sql
-      #     db-server-name: ${{ secrets.TEST_DB_SERVER }}
-      #     db-connection-string: ${{ secrets.TEST_CONNECTION_STRING }}
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -73,7 +62,7 @@ jobs:
         with:
           package: app
           app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          slot-name: production # only one available
+          slot-name: production # only one available with free plan
   release:
     name: GitHub Release
     runs-on: ubuntu-20.04
