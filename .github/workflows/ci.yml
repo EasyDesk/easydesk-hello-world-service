@@ -47,21 +47,33 @@ jobs:
     runs-on: windows-2019
     needs: [build]
     concurrency: deploy-test
+    environment: test
     if: needs.build.outputs.should-deploy == 'true'
     steps:
       - uses: actions/download-artifact@v2
         with:
           name: build-artifacts
-      - name: Deploy to Azure
-        uses: EasyDesk/job-azure-publish-webapp@v1
+      # This example doesn't use a database so we don't need this
+      # - name: Deploy to Azure
+      #   uses: EasyDesk/job-azure-publish-webapp@v1
+      #   with:
+      #     azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+      #     app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
+      #     publish-dir: app
+      #     slot-name: test
+      #     migrations-script: update-database.sql
+      #     db-server-name: ${{ secrets.TEST_DB_SERVER }}
+      #     db-connection-string: ${{ secrets.TEST_CONNECTION_STRING }}
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          package: app
           app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          publish-dir: app
           slot-name: test
-          migrations-script: update-database.sql
-          db-server-name: ${{ secrets.TEST_DB_SERVER }}
-          db-connection-string: ${{ secrets.TEST_CONNECTION_STRING }}
   release:
     name: GitHub Release
     runs-on: ubuntu-20.04
@@ -93,34 +105,34 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: build-artifacts
-      - name: Deploy to Azure
-        uses: EasyDesk/job-azure-publish-webapp@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          package: app
           app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          publish-dir: app
-          slot-name: ua
-          migrations-script: update-database.sql
-          db-server-name: ${{ secrets.UA_DB_SERVER }}
-          db-connection-string: ${{ secrets.UA_CONNECTION_STRING }}
+          slot-name: user-acceptance
   deploy-to-production:
     name: Deploy to Producion environment
     runs-on: windows-2019
     needs: [build, deploy-to-ua]
-    concurrency: deploy-production
+    concurrency: deploy-prod
     environment: production
     if: needs.build.outputs.should-deploy == 'true'
     steps:
       - uses: actions/download-artifact@v2
         with:
           name: build-artifacts
-      - name: Deploy to Azure
-        uses: EasyDesk/job-azure-publish-webapp@v1
+      - name: Login to Azure
+        uses: azure/login@v1
         with:
-          azure-credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          package: app
           app-name: ${{ env.AZURE_APP_SERVICE_NAME }}
-          publish-dir: app
           slot-name: production
-          migrations-script: update-database.sql
-          db-server-name: ${{ secrets.PRODUCTION_DB_SERVER }}
-          db-connection-string: ${{ secrets.PRODUCTION_CONNECTION_STRING }}
