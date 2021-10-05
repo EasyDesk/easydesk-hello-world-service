@@ -17,10 +17,6 @@
     <ProjectReference Include="..\HelloWorldService.Domain\HelloWorldService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DataAccess\Queries\" />
-  </ItemGroup>
-
   <PropertyGroup>
     <RootFolder>..\..</RootFolder>
   </PropertyGroup>
