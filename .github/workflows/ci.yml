@@ -50,7 +50,7 @@ jobs:
     environment: test
     if: needs.build.outputs.should-deploy == 'true'
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with:
           name: build-artifacts
       - name: Login to Azure
@@ -70,7 +70,7 @@ jobs:
     if: needs.build.outputs.should-release == 'true'
     concurrency: release
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4.1.7
         with:
           name: build-artifacts
       - name: Zip build assets
